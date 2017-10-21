@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Trade validation</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script>
+  <script src="script.js"></script>
+</head>
+
+<body>
+  <div class="container">
+    <div class="well">
+      <h1>Trade information</h1>
+      <form id="ajaxForm" class="form-vertical" role="form" autocomplete="off" method="POST" action="/validateTrade">
+        
+        <fieldset>
+          <div class="pull-right">
+            <br>
+            <div class="btn-group col-xs-12">
+              <button type="button" class="btn btn-default" id="defaultSpotData">Fill spot defaults</button>
+              <button type="button" class="btn btn-default" id="defaultForwardData">Fill forward defaults</button>
+              <button type="button" class="btn btn-default" id="defaultOptionEuData">Fill EU option defaults</button>
+              <button type="button" class="btn btn-default" id="defaultOptionUsData">Fill US option defaults</button>
+            </div>
+          </div>
+          <div class="form-group col-xs-12 col-sm-12">
+            <label for="type" class="control-label">Product type</label>
+            <select class="selectpicker form-control" title="Choose product type" name="type" id="type" placeholder="Choose product type">
+              <option>Spot</option>
+              <option>Forward</option>
+              <option>VanillaOption</option>
+            </select>
+          </div>
+		  <div class="form-group col-xs-6 col-sm-6 option-exclusive">
+            <label for="style" class="control-lable">Style</label>
+            <input type="text" class="form-control" name="style" id="style" placeholder="Enter option style">
+          </div>
+          <div id='spot_field' class="form-group col-xs-6 col-sm-6">
+            <label for="customer" class="control-label">Customer</label>
+            <input type="text" class="form-control" name="customer" id="customer" placeholder="Enter customer name">
+          </div>
+          <div class="form-group col-xs-6 col-sm-6">
+            <label for="ccyPair" class="control-lable">Currency pair</label>
+            <input type="text" class="form-control" name="ccyPair" id="ccyPair" placeholder="Enter currency pair">
+          </div>
+          <div class="form-group col-xs-6 col-sm-6">
+            <label for="direction" class="control-lable">Direction</label>
+            <input type="text" class="form-control" name="direction" id="direction" placeholder="Enter trade direction">
+          </div>
+		  <div class="form-group col-xs-6 col-sm-6 option-exclusive">
+            <label for="strategy" class="control-lable">Strategy</label>
+            <input type="text" class="form-control" name="strategy" id="strategy" placeholder="Enter trade strategy">
+          </div>
+          <div class="form-group col-xs-6 col-sm-6">
+            <label for="tradeDate" class="control-lable">Trade date</label>
+            <input type="text" class="form-control" name="tradeDate" id="tradeDate" placeholder="Enter trade date">
+          </div>
+          <div class="form-group col-xs-6 col-sm-6">
+            <label for="amount1" class="control-lable">Amount 1</label>
+            <input type="number" class="form-control" name="amount1" id="amount1" placeholder="Enter amount 1">
+          </div>
+          <div class="form-group col-xs-6 col-sm-6">
+            <label for="amount2" class="control-lable">Amount 2</label>
+            <input type="number" class="form-control" name="amount2" id="amount2" placeholder="Enter amount 2">
+          </div>          
+          <div class="form-group col-xs-6 col-sm-6">
+            <label for="rate" class="control-lable">Rate</label>
+            <input type="text" class="form-control" name="rate" id="rate" placeholder="Enter rate">
+          </div>
+		  <div class="form-group col-xs-6 col-sm-6  option-exclusive">
+            <label for="deliveryDate" class="control-lable">Delivery date</label>
+            <input type="text" class="form-control" name="deliveryDate" id="deliveryDate" placeholder="Enter delivery date">
+          </div>
+		  <div class="form-group col-xs-6 col-sm-6  option-exclusive">
+            <label for="expiryDate" class="control-lable">Expiry date</label>
+            <input type="text" class="form-control" name="expiryDate" id="expiryDate" placeholder="Enter expiry date">
+          </div>
+		  <div class="form-group col-xs-6 col-sm-6  option-exclusive">
+            <label for="excerciseStartDate" class="control-lable">Exercise start date</label>
+            <input type="text" class="form-control" name="excerciseStartDate" id="excerciseStartDate" placeholder="Enter exercise start date">
+          </div>
+		  <div class="form-group col-xs-6 col-sm-6  option-exclusive">
+            <label for="payCcy" class="control-lable">Pay currency</label>
+            <input type="text" class="form-control" name="payCcy" id="payCcy" placeholder="Enter pay currency">
+          </div>
+		  <div class="form-group col-xs-6 col-sm-6  option-exclusive">
+            <label for="premium" class="control-lable">Premium</label>
+            <input type="text" class="form-control" name="premium" id="premium" placeholder="Enter premium">
+          </div>
+		  <div class="form-group col-xs-6 col-sm-6  option-exclusive">
+            <label for="premiumCcy" class="control-lable">Premium currency</label>
+            <input type="text" class="form-control" name="premiumCcy" id="premiumCcy" placeholder="Enter premium currency">
+          </div>
+		  <div class="form-group col-xs-6 col-sm-6  option-exclusive">
+            <label for="premiumType" class="control-lable">Premium type</label>
+            <input type="text" class="form-control" name="premiumType" id="premiumType" placeholder="Enter premium type">
+          </div>
+		  <div class="form-group col-xs-6 col-sm-6  option-exclusive">
+            <label for="premiumDate" class="control-lable">Premium date</label>
+            <input type="text" class="form-control" name="premiumDate" id="premiumDate" placeholder="Enter premium date">
+          </div>
+          <div class="form-group col-xs-6 col-sm-6 spot-forward-exclusive">
+            <label for="valueDate" class="control-lable">Value date</label>
+            <input type="text" class="form-control" name="valueDate" id="valueDate" placeholder="Enter value date">
+          </div>
+          <div class="form-group col-xs-6 col-sm-6">
+            <label for="legalEntity" class="control-lable">Legal entity</label>
+            <input type="text" class="form-control" name="legalEntity" id="legalEntity" placeholder="Enter legal entity">
+          </div>
+          <div class="form-group col-xs-6 col-sm-6">
+            <label for="trader" class="control-lable">Trader</label>
+            <input type="text" class="form-control" name="trader" id="trader" placeholder="Enter trader name">
+          </div>
+          <div class="pull-right">
+            <br>
+            <div class="btn-group col-xs-12">
+              <button type="button" class="btn btn-primary" id="sendJson">Validate trade</button>
+            </div>
+          </div>
+        </fieldset>
+      </form>
+    </div>
+  </div>
+  <div class="container">
+    <div class="well col-xs-12">
+      <div class="control-label col-xs-12">
+        <label>Data sent:</label>
+      </div>
+      <div class="col-xs-12">
+        <textarea class="form-control" readonly id="dataSent"></textarea>
+        <br>
+      </div>
+      <div class="control-label col-xs-12">
+        <label>Result:</label>
+      </div>
+      <div class="col-xs-12">
+        <textarea class="form-control" readonly id="results">Waiting for response</textarea>
+      </div>
+    </div>
+  </div>
+</body>
+
+
+</html>
+

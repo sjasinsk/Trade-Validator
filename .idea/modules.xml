@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/trade-validator.iml" filepath="$PROJECT_DIR$/.idea/modules/trade-validator.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/trade-validator_main.iml" filepath="$PROJECT_DIR$/.idea/modules/trade-validator_main.iml" group="trade-validator" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/trade-validator_test.iml" filepath="$PROJECT_DIR$/.idea/modules/trade-validator_test.iml" group="trade-validator" />
+    </modules>
+  </component>
+</project>

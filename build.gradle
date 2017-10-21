@@ -1,0 +1,30 @@
+apply plugin: 'java'
+apply plugin:'application'
+apply plugin: 'idea'
+
+sourceCompatibility = 1.8
+mainClassName = "TradeValidatorApp"
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile "org.glassfish.hk2:hk2-api:+"
+    compile "org.glassfish.jersey.inject:jersey-hk2:+"
+    compile "org.glassfish.jersey.containers:jersey-container-grizzly2-http:+"
+    compile "org.glassfish.jersey.containers:jersey-container-servlet:+"
+    compile "org.glassfish.jersey.media:jersey-media-json-jackson:+"
+    compile "com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider:+"
+	compile "org.apache.commons:commons-lang3:+"
+	testCompile "junit:junit:4.12"
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '4.2'
+}
+
+run{
+    standardInput = System.in
+}
+
