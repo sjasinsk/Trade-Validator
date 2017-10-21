@@ -52,14 +52,14 @@ public class ValueDateOnWorkingDayValidationRuleTest {
     }
 
     @Test
-    public void shouldValidateSuccessfullyForValueOnWorkingDay() throws Exception {
+    public void shouldValidateSuccessfullyForValueDateOnWorkingDay() throws Exception {
         Spot trade = TradeTestDataProvider.getValidSpot();
         rule.validate(trade, vc);
         assertEquals(ValidationResult.SUCCESS, vc.getValidationResult());
     }
 
     @Test
-    public void shouldValidateSuccessfullyForValueOnNonWorkingDay() throws Exception {
+    public void shouldValidateSuccessfullyForValueDateOnNonWorkingDay() throws Exception {
         Spot trade = TradeTestDataProvider.getValidSpot();
         trade.setValueDate(LocalDate.parse("2016-01-01"));
         rule.validate(trade, vc);
@@ -67,7 +67,7 @@ public class ValueDateOnWorkingDayValidationRuleTest {
     }
 
     @Test
-    public void shouldValidateSuccessfullyForValueOnWeekend() throws Exception {
+    public void shouldValidateSuccessfullyForValueDateOnWeekend() throws Exception {
         Spot trade = TradeTestDataProvider.getValidSpot();
         trade.setValueDate(LocalDate.parse("2017-10-15"));
         rule.validate(trade, vc);

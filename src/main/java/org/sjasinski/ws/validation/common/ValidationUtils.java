@@ -70,7 +70,7 @@ public final class ValidationUtils {
      * @return quote currency
      */
     public static String getQuoteCurrency(Trade trade) {
-        return trade.getCcyPair().substring(0, 3);
+        return trade.getCcyPair().substring(3);
     }
 
     /**
@@ -80,7 +80,7 @@ public final class ValidationUtils {
      * @return base currency
      */
     public static String getBaseCurrency(Trade trade) {
-        return trade.getCcyPair().substring(3);
+        return trade.getCcyPair().substring(0, 3);
     }
 
     /**

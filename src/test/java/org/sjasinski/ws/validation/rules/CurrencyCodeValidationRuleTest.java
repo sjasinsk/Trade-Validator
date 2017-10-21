@@ -55,7 +55,7 @@ public class CurrencyCodeValidationRuleTest {
     @Test
     public void shouldFailForInvalidBaseCurrency() throws Exception {
         Trade trade = TradeTestDataProvider.getValidSpot();
-        trade.setCcyPair("EURUSA");
+        trade.setCcyPair("EUUUSD");
         rule.validate(trade, vc);
         assertEquals(ValidationResult.FAILURE, vc.getValidationResult());
     }
@@ -63,7 +63,7 @@ public class CurrencyCodeValidationRuleTest {
     @Test
     public void shouldFailForInvalidQuoteCurrency() throws Exception {
         Trade trade = TradeTestDataProvider.getValidSpot();
-        trade.setCcyPair("EUUUSD");
+        trade.setCcyPair("EURUSA");
         rule.validate(trade, vc);
         assertEquals(ValidationResult.FAILURE, vc.getValidationResult());
     }
