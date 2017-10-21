@@ -5,6 +5,10 @@ import org.jvnet.hk2.annotations.Service;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
 
+/**
+ * Fixer service.
+ * Foreign exchange rates and currency conversion API.
+ */
 @Service
 public class FixerService {
 

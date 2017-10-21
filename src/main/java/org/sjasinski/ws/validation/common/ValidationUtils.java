@@ -1,6 +1,7 @@
 package org.sjasinski.ws.validation.common;
 
 import org.apache.commons.lang3.EnumUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.sjasinski.ws.model.Forward;
 import org.sjasinski.ws.model.Spot;
 import org.sjasinski.ws.model.Trade;
@@ -70,7 +71,7 @@ public final class ValidationUtils {
      * @return quote currency
      */
     public static String getQuoteCurrency(Trade trade) {
-        return trade.getCcyPair().substring(3);
+        return StringUtils.substring(trade.getCcyPair(), 3);
     }
 
     /**
@@ -80,7 +81,7 @@ public final class ValidationUtils {
      * @return base currency
      */
     public static String getBaseCurrency(Trade trade) {
-        return trade.getCcyPair().substring(0, 3);
+        return StringUtils.substring(trade.getCcyPair(), 0, 3);
     }
 
     /**

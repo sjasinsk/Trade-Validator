@@ -7,7 +7,7 @@ public class ValidationContext {
     List<ValidationError> validationErrors = new ArrayList<>();
 
     /**
-     * Adds error to validation results
+     * Adds error to validation context.
      *
      * @param error the error
      */

@@ -37,7 +37,7 @@ public class OptionExerciseStartDateValidationRuleTest {
     }
 
     @Test
-    public void shouldNotBeEffectiveForAmericanOption() throws Exception {
+    public void shouldBeEffectiveForAmericanOption() throws Exception {
         assertTrue(rule.isEffective(TradeTestDataProvider.getValidOptionUs(), vc));
     }
 

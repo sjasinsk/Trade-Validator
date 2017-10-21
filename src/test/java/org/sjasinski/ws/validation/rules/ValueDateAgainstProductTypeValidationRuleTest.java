@@ -2,6 +2,7 @@ package org.sjasinski.ws.validation.rules;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.sjasinski.ws.model.Forward;
 import org.sjasinski.ws.model.Spot;
 import org.sjasinski.ws.validation.common.TradeTestDataProvider;
 import org.sjasinski.ws.validation.common.ValidationContext;
@@ -57,14 +58,14 @@ public class ValueDateAgainstProductTypeValidationRuleTest {
 
     @Test
     public void shouldValidateSuccessfullyForValueDateInTheFuture() throws Exception {
-        Spot trade = TradeTestDataProvider.getValidSpot();
+        Forward trade = TradeTestDataProvider.getValidForward();
         rule.validate(trade, vc);
         assertEquals(ValidationResult.SUCCESS, vc.getValidationResult());
     }
 
     @Test
     public void shouldFailForValueDateInThePast() throws Exception {
-        Spot trade = TradeTestDataProvider.getValidSpot();
+        Forward trade = TradeTestDataProvider.getValidForward();
         trade.setValueDate(LocalDate.parse("2016-07-09"));
         rule.validate(trade, vc);
         assertEquals(ValidationResult.FAILURE, vc.getValidationResult());

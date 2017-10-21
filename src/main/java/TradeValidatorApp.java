@@ -8,6 +8,16 @@ import org.sjasinski.ws.fixer.FixerService;
 import java.io.IOException;
 import java.net.URI;
 
+/**
+ * Simple trade validation application.
+ *
+ * Implemented API allows to:
+ * 1. Perform bulk validation of array of trades via /validateTrades POST request.
+ * 2. Validate single trades via /validateTrade.
+ *
+ * Online API documentation is available at https://app.swaggerhub.com/apis/sjasinski/TradeValidator/1.0.0
+ *
+ */
 public class TradeValidatorApp {
     private static final URI BASE_URI = URI.create("http://localhost:8080/");
 
