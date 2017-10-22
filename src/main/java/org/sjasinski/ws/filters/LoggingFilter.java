@@ -27,7 +27,7 @@ public class LoggingFilter implements ContainerRequestFilter, ContainerResponseF
     private ThreadLocal<Long> startTime = new ThreadLocal<>();
 
     private final Multiset<Long> requestProcessingTimes = TreeMultiset.create();
-    
+
     @Override
     public void filter(ContainerRequestContext requestContext) throws IOException {
         startTime.set(System.currentTimeMillis());
@@ -78,7 +78,7 @@ public class LoggingFilter implements ContainerRequestFilter, ContainerResponseF
 
             LOGGER.info("Quantile 95: {} milliseconds", getQuantile(95));
 
-            startTime = null;
+            startTime.set(null);
         }
     }
 
