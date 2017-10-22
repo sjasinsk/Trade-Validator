@@ -1,4 +1,4 @@
-package org.sjasinski.ws.common;
+package org.sjasinski.ws.filters;
 
 import java.io.IOException;
 import javax.ws.rs.container.ContainerRequestContext;

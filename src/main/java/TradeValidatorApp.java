@@ -2,7 +2,8 @@ import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.hk2.utilities.binding.AbstractBinder;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
-import org.sjasinski.ws.common.CORSFilter;
+import org.sjasinski.ws.filters.CORSFilter;
+import org.sjasinski.ws.filters.LoggingFilter;
 import org.sjasinski.ws.fixer.FixerService;
 
 import java.io.IOException;
@@ -31,6 +32,7 @@ public class TradeValidatorApp {
         ResourceConfig resourceConfig = new ResourceConfig();
         resourceConfig.packages("org.sjasinski.ws.api");
         resourceConfig.register(new CORSFilter());
+        resourceConfig.register(new LoggingFilter());
         resourceConfig.register(new AbstractBinder() {
             @Override
             protected void configure() {
