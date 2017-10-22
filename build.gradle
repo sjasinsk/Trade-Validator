@@ -17,6 +17,8 @@ dependencies {
     compile "org.glassfish.jersey.media:jersey-media-json-jackson:+"
     compile "com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider:+"
 	compile "org.apache.commons:commons-lang3:+"
+	compile "com.google.guava:guava:+"
+	compile "org.slf4j:slf4j-simple:+"
 	testCompile "junit:junit:4.12"
 }
 
