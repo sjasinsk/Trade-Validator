@@ -20,17 +20,17 @@ import org.slf4j.LoggerFactory;
 
 @Provider
 public class LoggingFilter implements ContainerRequestFilter, ContainerResponseFilter {
-    private static Long minTime = null;
-    private static Long maxTime = null;
-    private static Long startTime = null;
-
-    private static final Multiset<Long> REQUEST_PROCESSING_TIMES = TreeMultiset.create();
-
     private static final Logger LOGGER = LoggerFactory.getLogger(LoggingFilter.class);
+    
+    private Long minTime = null;
+    private Long maxTime = null;
+    private ThreadLocal<Long> startTime = new ThreadLocal<>();
 
+    private final Multiset<Long> requestProcessingTimes = TreeMultiset.create();
+    
     @Override
     public void filter(ContainerRequestContext requestContext) throws IOException {
-        startTime = System.currentTimeMillis();
+        startTime.set(System.currentTimeMillis());
 
         LOGGER.info("Resource: /{} ", requestContext.getUriInfo().getPath());
         LOGGER.info("Method: /{} ", requestContext.getMethod());
@@ -65,16 +65,16 @@ public class LoggingFilter implements ContainerRequestFilter, ContainerResponseF
     @Override
     public void filter(ContainerRequestContext requestContext, ContainerResponseContext responseContext)
             throws IOException {
-        if (startTime != null) {
-            Long executionTime = System.currentTimeMillis() - startTime;
-            REQUEST_PROCESSING_TIMES.add(executionTime);
-            LOGGER.info("Current request execution time: {} milliseconds", executionTime);
+        if (startTime.get() != null) {
+            Long processingTime = System.currentTimeMillis() - startTime.get();
+            requestProcessingTimes.add(processingTime);
+            LOGGER.info("Current request processing time: {} milliseconds", processingTime);
 
-            determineMinExecutionTime(executionTime);
-            LOGGER.info("Minimum request execution time: {} milliseconds", minTime);
+            determineMinExecutionTime(processingTime);
+            LOGGER.info("Minimum request processing time: {} milliseconds", minTime);
 
-            determineMaxExecutionTime(executionTime);
-            LOGGER.info("Maximum request execution time: {} milliseconds", maxTime);
+            determineMaxExecutionTime(processingTime);
+            LOGGER.info("Maximum request processing time: {} milliseconds", maxTime);
 
             LOGGER.info("Quantile 95: {} milliseconds", getQuantile(95));
 
@@ -82,33 +82,33 @@ public class LoggingFilter implements ContainerRequestFilter, ContainerResponseF
         }
     }
 
-    private void determineMinExecutionTime(Long executionTime) {
+    private synchronized void determineMinExecutionTime(Long processingTime) {
         if(minTime != null) {
-            if (executionTime < minTime) {
-                minTime = executionTime;
+            if (processingTime < minTime) {
+                minTime = processingTime;
             }
         } else {
-            minTime = executionTime;
+            minTime = processingTime;
         }
     }
 
-    private void determineMaxExecutionTime(Long executionTime) {
+    private synchronized void determineMaxExecutionTime(Long processingTime) {
         if(maxTime != null) {
-            if (executionTime > maxTime) {
-                maxTime = executionTime;
+            if (processingTime > maxTime) {
+                maxTime = processingTime;
             }
         } else {
-            maxTime = executionTime;
+            maxTime = processingTime;
         }
     }
 
     private Long getQuantile(int q) {
-        int index = (int) Math.round(REQUEST_PROCESSING_TIMES.size() * (q / 100.0)) - 1;
-        LOGGER.info("Request execution time set: {}, size: {}", REQUEST_PROCESSING_TIMES, REQUEST_PROCESSING_TIMES.size());
+        int index = (int) Math.round(requestProcessingTimes.size() * (q / 100.0)) - 1;
+        LOGGER.info("Request processing time set: {}, size: {}", requestProcessingTimes, requestProcessingTimes.size());
         LOGGER.info("Quantile 95 index: {}", index);
 
-        if (index < REQUEST_PROCESSING_TIMES.size()) {
-            return (Long) REQUEST_PROCESSING_TIMES.toArray()[index];
+        if (index < requestProcessingTimes.size()) {
+            return (Long) requestProcessingTimes.toArray()[index];
         }
         return null;
     }
