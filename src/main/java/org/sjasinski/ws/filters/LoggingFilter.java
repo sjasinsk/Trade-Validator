@@ -21,7 +21,7 @@ import org.slf4j.LoggerFactory;
 @Provider
 public class LoggingFilter implements ContainerRequestFilter, ContainerResponseFilter {
     private static final Logger LOGGER = LoggerFactory.getLogger(LoggingFilter.class);
-    
+
     private Long minTime = null;
     private Long maxTime = null;
     private ThreadLocal<Long> startTime = new ThreadLocal<>();
@@ -63,10 +63,11 @@ public class LoggingFilter implements ContainerRequestFilter, ContainerResponseF
     }
 
     @Override
-    public void filter(ContainerRequestContext requestContext, ContainerResponseContext responseContext)
+    public synchronized void filter(ContainerRequestContext requestContext, ContainerResponseContext responseContext)
             throws IOException {
         if (startTime.get() != null) {
             Long processingTime = System.currentTimeMillis() - startTime.get();
+
             requestProcessingTimes.add(processingTime);
             LOGGER.info("Current request processing time: {} milliseconds", processingTime);
 
@@ -77,12 +78,10 @@ public class LoggingFilter implements ContainerRequestFilter, ContainerResponseF
             LOGGER.info("Maximum request processing time: {} milliseconds", maxTime);
 
             LOGGER.info("Quantile 95: {} milliseconds", getQuantile(95));
-
-            startTime.set(null);
         }
     }
 
-    private synchronized void determineMinExecutionTime(Long processingTime) {
+    private void determineMinExecutionTime(Long processingTime) {
         if(minTime != null) {
             if (processingTime < minTime) {
                 minTime = processingTime;
@@ -92,7 +91,7 @@ public class LoggingFilter implements ContainerRequestFilter, ContainerResponseF
         }
     }
 
-    private synchronized void determineMaxExecutionTime(Long processingTime) {
+    private void determineMaxExecutionTime(Long processingTime) {
         if(maxTime != null) {
             if (processingTime > maxTime) {
                 maxTime = processingTime;
