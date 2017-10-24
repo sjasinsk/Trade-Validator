@@ -19,7 +19,7 @@ public class ValueDateAgainstProductTypeValidationRule implements ValidationRule
     }
 
     /**
-     * Value date cannot fall on weekend or non-working day for currency.
+     * Value date cannot be in the past for any product.
      *
      * @param trade the trade
      * @param validationContext the validation context

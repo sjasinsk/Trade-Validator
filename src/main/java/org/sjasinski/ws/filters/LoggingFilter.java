@@ -18,6 +18,9 @@ import org.glassfish.jersey.message.internal.ReaderWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Logging filter for showing simple request processing statistical data.
+ */
 @Provider
 public class LoggingFilter implements ContainerRequestFilter, ContainerResponseFilter {
     private static final Logger LOGGER = LoggerFactory.getLogger(LoggingFilter.class);
@@ -77,7 +80,12 @@ public class LoggingFilter implements ContainerRequestFilter, ContainerResponseF
             determineMaxExecutionTime(processingTime);
             LOGGER.info("Maximum request processing time: {} milliseconds", maxTime);
 
-            LOGGER.info("Quantile 95: {} milliseconds", getQuantile(95));
+            Long q95 = getQuantile(95);
+            if (q95 != null) {
+                LOGGER.info("Quantile 95: {} milliseconds", q95);
+            } else {
+                LOGGER.info("Quantile 95: N/A");
+            }
         }
     }
 
@@ -104,9 +112,9 @@ public class LoggingFilter implements ContainerRequestFilter, ContainerResponseF
     private Long getQuantile(int q) {
         int index = (int) Math.round(requestProcessingTimes.size() * (q / 100.0)) - 1;
         LOGGER.info("Request processing time set: {}, size: {}", requestProcessingTimes, requestProcessingTimes.size());
-        LOGGER.info("Quantile 95 index: {}", index);
+        LOGGER.info("Quantile {} index: {}", q, index);
 
-        if (index < requestProcessingTimes.size()) {
+        if (index >= 0 && index < requestProcessingTimes.size()) {
             return (Long) requestProcessingTimes.toArray()[index];
         }
         return null;
