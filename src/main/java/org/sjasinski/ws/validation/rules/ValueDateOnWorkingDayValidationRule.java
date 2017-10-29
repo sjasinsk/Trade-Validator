@@ -7,7 +7,6 @@ import org.sjasinski.ws.validation.common.ValidationContext;
 import org.sjasinski.ws.validation.common.ValidationError;
 import org.sjasinski.ws.validation.common.ValidationUtils;
 
-import javax.inject.Inject;
 import java.time.LocalDate;
 
 import static org.sjasinski.ws.validation.common.ValidationUtils.PRODUCT_TYPES_WITH_VALUE_DATE;

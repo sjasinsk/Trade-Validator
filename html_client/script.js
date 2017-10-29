@@ -23,7 +23,7 @@ $(document).ready(function() {
     event.preventDefault();
     var form = $('#ajaxForm');
     var method = form.attr('method');
-    var url = 'http://localhost:8080' + form.attr('action');
+    var url = 'http://localhost:8079' + form.attr('action');
     var jsonData = {};
 	$("#results").val('Waiting for response');
     $.each($(form).serializeArray(), function() {

@@ -20,7 +20,7 @@ import java.net.URI;
  *
  */
 public class TradeValidatorApp {
-    private static final URI BASE_URI = URI.create("http://localhost:8080/");
+    private static final URI BASE_URI = URI.create("http://localhost:8079/");
 
     public static void main(String[] args) throws IOException {
         final HttpServer server = GrizzlyHttpServerFactory.createHttpServer(BASE_URI, create());

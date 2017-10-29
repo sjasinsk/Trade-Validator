@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.concurrent.atomic.AtomicLong;
 
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
@@ -25,9 +26,9 @@ import org.slf4j.LoggerFactory;
 public class LoggingFilter implements ContainerRequestFilter, ContainerResponseFilter {
     private static final Logger LOGGER = LoggerFactory.getLogger(LoggingFilter.class);
 
-    private Long minTime = null;
-    private Long maxTime = null;
-    private ThreadLocal<Long> startTime = new ThreadLocal<>();
+    private final AtomicLong minTime = new AtomicLong(Long.MAX_VALUE);
+    private final AtomicLong maxTime = new AtomicLong(Long.MIN_VALUE);
+    private final ThreadLocal<Long> startTime = new ThreadLocal<>();
 
     private final Multiset<Long> requestProcessingTimes = TreeMultiset.create();
 
@@ -66,13 +67,17 @@ public class LoggingFilter implements ContainerRequestFilter, ContainerResponseF
     }
 
     @Override
-    public synchronized void filter(ContainerRequestContext requestContext, ContainerResponseContext responseContext)
+    public void filter(ContainerRequestContext requestContext, ContainerResponseContext responseContext)
             throws IOException {
         if (startTime.get() != null) {
             Long processingTime = System.currentTimeMillis() - startTime.get();
-
-            requestProcessingTimes.add(processingTime);
             LOGGER.info("Current request processing time: {} milliseconds", processingTime);
+
+            Long q95;
+            synchronized (requestProcessingTimes) {
+                requestProcessingTimes.add(processingTime);
+                q95 = getQuantile(95);
+            }
 
             determineMinExecutionTime(processingTime);
             LOGGER.info("Minimum request processing time: {} milliseconds", minTime);
@@ -80,32 +85,30 @@ public class LoggingFilter implements ContainerRequestFilter, ContainerResponseF
             determineMaxExecutionTime(processingTime);
             LOGGER.info("Maximum request processing time: {} milliseconds", maxTime);
 
-            Long q95 = getQuantile(95);
             if (q95 != null) {
                 LOGGER.info("Quantile 95: {} milliseconds", q95);
             } else {
                 LOGGER.info("Quantile 95: N/A");
             }
+
+            // thread-local cleanup
+            startTime.remove();
         }
     }
 
     private void determineMinExecutionTime(Long processingTime) {
-        if(minTime != null) {
-            if (processingTime < minTime) {
-                minTime = processingTime;
-            }
-        } else {
-            minTime = processingTime;
+        long expectedMin = minTime.get();
+
+        while (processingTime < expectedMin && !minTime.compareAndSet(expectedMin, processingTime)) {
+            expectedMin = minTime.get();
         }
     }
 
     private void determineMaxExecutionTime(Long processingTime) {
-        if(maxTime != null) {
-            if (processingTime > maxTime) {
-                maxTime = processingTime;
-            }
-        } else {
-            maxTime = processingTime;
+        long expectedMax = maxTime.get();
+
+        while (processingTime > expectedMax && !maxTime.compareAndSet(expectedMax, processingTime)) {
+            expectedMax = maxTime.get();
         }
     }
 
