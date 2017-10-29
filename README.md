@@ -11,9 +11,9 @@ Online API documentation is available at https://app.swaggerhub.com/apis/sjasins
 
 To facilitate testing sample test files are available in test_data subdirectory, these can be sent via POST using curl e.g.:
 
-curl -X POST -d @forward.json http://localhost:8080/validateTrade --header "Content-Type:application/json"
+curl -X POST -d @forward.json http://localhost:8079/validateTrade --header "Content-Type:application/json"
 
-curl -X POST -d @trades.json http://localhost:8080/validateTrades --header "Content-Type:application/json"
+curl -X POST -d @trades.json http://localhost:8079/validateTrades --header "Content-Type:application/json"
 
 For the purpose of this exercise all validation rules were fully covered with JUnit tests (100% method and 100% line coverage).
 
